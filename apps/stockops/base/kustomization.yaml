@@ -1,0 +1,6 @@
+# base: 리전 무관 앱 워크로드 묶음 (api-server, ai-module)
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - api-server.yaml
+  - ai-module.yaml

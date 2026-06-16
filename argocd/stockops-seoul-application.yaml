@@ -1,0 +1,41 @@
+# ==========================================================================
+# ArgoCD Application — 서울 stockops (api + ai)
+# 입양(adopt) 대상: 이미 떠 있는 stockops-api / stockops-ai Deployment.
+# repoURL 은 새로 만들 gitops 레포 주소로 교체할 것.
+# ==========================================================================
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: stockops-seoul
+  namespace: argocd
+  # 실수로 Application 이 지워져도 워크로드는 남기기(안전):
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/hansLee-it/stockops-gitops.git
+    targetRevision: main
+    path: apps/stockops/overlays/seoul
+
+  destination:
+    server: https://kubernetes.default.svc   # 서울 = ArgoCD 자기 클러스터(in-cluster)
+    namespace: stockops
+
+  # HPA 가 replicas 를 소유하므로 ArgoCD 는 replicas diff 를 무시(서로 안 싸우게)
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas
+
+  syncPolicy:
+    # ── 처음 입양할 땐 automated 블록을 통째로 주석 처리하고 수동 sync 로
+    #    diff 를 눈으로 확인 → 깨끗하면 아래 주석 해제해서 자동/자가치유 켤 것 ──
+    automated:
+      prune: true       # git 에서 지운 리소스는 클러스터에서도 제거
+      selfHeal: true    # 클러스터가 git 과 어긋나면 자동 복구
+    syncOptions:
+      - CreateNamespace=false   # stockops 네임스페이스는 Terraform 소유
+      - ApplyOutOfSyncOnly=true
