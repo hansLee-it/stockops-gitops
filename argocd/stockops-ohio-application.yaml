@@ -17,7 +17,7 @@ spec:
   source:
     repoURL: https://github.com/jinuuuKim/stockops-gitops.git
     targetRevision: main
-    path: apps/stockops/ohio/overlays/ohio
+    path: apps/stockops/ohio/overlays/
 
   destination:
     server: https://kubernetes.default.svc # 서울 = ArgoCD 자기 클러스터(in-cluster)
