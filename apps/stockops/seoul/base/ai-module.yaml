@@ -46,3 +46,28 @@ spec:
                   key: DB_PASSWORD
             - name: DATABASE_URL   # [region] 서울 RDS 엔드포인트
               value: "postgresql://$(DB_USERNAME):$(DB_PASSWORD)@seoul-rds-postgres.cnas28mgerfu.ap-northeast-2.rds.amazonaws.com:5432/stockops"
+            - name: SERVICE_HOST
+              value: "0.0.0.0"
+            - name: SERVICE_PORT
+              value: "8000"
+            - name: MODEL_CACHE_TTL_SECONDS
+              value: "3600"
+            - name: MODEL_CACHE_MAX_SIZE
+              value: "10"
+            - name: MIN_HISTORY_DAYS
+              value: "14"
+            - name: MAPE_ALERT_THRESHOLD
+              value: "30.0"
+            - name: EVALUATION_TRAIN_RATIO
+              value: "0.8"
+            - name: DB_POOL_MIN
+              value: "2"
+            - name: DB_POOL_MAX
+              value: "10"
+            - name: DB_CONNECT_TIMEOUT
+              value: "10"
+            - name: AI_MODULE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stockops-secret
+                  key: AI_MODULE_API_KEY

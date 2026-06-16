@@ -85,3 +85,171 @@ spec:
               value: "ap-northeast-2"
             - name: STOCKOPS_MQTT_INGESTION_ENABLED
               value: "false"
+            - name: SERVER_PORT
+              value: "8080"
+            - name: STOCKOPS_ENVIRONMENT
+              value: "local"
+            - name: JWT_EXPIRATION
+              value: "86400000"
+            - name: STOCKOPS_REDIS_ENABLED
+              value: "true"
+            - name: STOCKOPS_MQTT_INGESTION_BROKER_URL
+              value: "tcp://localhost:1883"
+            - name: STOCKOPS_MQTT_INGESTION_QOS
+              value: "1"
+            - name: STOCKOPS_MQTT_INGESTION_CLIENT_ID
+              value: ""
+            - name: STOCKOPS_SQS_INGESTION_MAX_MESSAGES
+              value: "10"
+            - name: STOCKOPS_SQS_INGESTION_WAIT_TIME_SECONDS
+              value: "20"
+            - name: STOCKOPS_SQS_INGESTION_VISIBILITY_TIMEOUT_SECONDS
+              value: "30"
+            - name: STOCKOPS_SQS_INGESTION_ERROR_BACKOFF_MILLIS
+              value: "5000"
+            - name: STOCKOPS_SENSOR_CACHE_RECENT_WINDOW
+              value: "10m"
+            - name: STOCKOPS_SENSOR_CACHE_KEY_TTL
+              value: "15m"
+            - name: STOCKOPS_SENSIMUL_BASE_URL
+              value: "http://localhost:18080"
+            - name: STOCKOPS_AI_SERVICE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stockops-secret
+                  key: STOCKOPS_AI_SERVICE_API_KEY
+            - name: GEMINI_ENABLED
+              value: "false"
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stockops-secret
+                  key: GEMINI_API_KEY
+            - name: AWS_REGION
+              value: "ap-northeast-2"
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: stockops-secret
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stockops-secret
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: AWS_SESSION_TOKEN
+              value: ""
+            - name: STOCKOPS_BEDROCK_ENABLED
+              value: "false"
+            - name: STOCKOPS_BEDROCK_REGION
+              value: "ap-northeast-2"
+            - name: STOCKOPS_BEDROCK_MODEL_ID
+              value: ""
+            - name: STOCKOPS_BEDROCK_INFERENCE_PROFILE_ARN
+              value: ""
+            - name: STOCKOPS_BEDROCK_KNOWLEDGE_BASE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: stockops-secret
+                  key: STOCKOPS_BEDROCK_KNOWLEDGE_BASE_ID
+            - name: STOCKOPS_BEDROCK_AGENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: stockops-secret
+                  key: STOCKOPS_BEDROCK_AGENT_ID
+            - name: STOCKOPS_BEDROCK_AGENT_ALIAS_ID
+              valueFrom:
+                secretKeyRef:
+                  name: stockops-secret
+                  key: STOCKOPS_BEDROCK_AGENT_ALIAS_ID
+            - name: STOCKOPS_BEDROCK_GUARDRAIL_ID
+              valueFrom:
+                secretKeyRef:
+                  name: stockops-secret
+                  key: STOCKOPS_BEDROCK_GUARDRAIL_ID
+            - name: STOCKOPS_BEDROCK_GUARDRAIL_VERSION
+              value: ""
+            - name: STOCKOPS_BEDROCK_MAX_TOOL_TURNS
+              value: "5"
+            - name: STOCKOPS_BEDROCK_MAX_OUTPUT_TOKENS
+              value: "1200"
+            - name: STOCKOPS_BEDROCK_TEMPERATURE
+              value: "0.2"
+            - name: STOCKOPS_BEDROCK_SYSTEM_PROMPT
+              value: |-
+                당신은 StockOps 재고관리 ERP 시스템 안에서 사용자를 돕는 AI 업무 보조자입니다.
+
+                당신의 역할은 재고, 발주, 입고, 반품, 재고 조정, 안전재고, 재주문점, 수요 예측, 이상 징후, 운영 절차와 관련된 사용자의 질문에 실무적으로 도움이 되는 답변을 제공하는 것입니다.
+
+                모든 답변은 반드시 한국어로 작성합니다.
+                사용자에게 항상 존댓말을 사용합니다.
+                반말, 비속어, 조롱, 무례한 표현, 과도하게 가벼운 표현은 절대 사용하지 않습니다.
+                사용자를 존중하는 차분하고 전문적인 말투를 유지합니다.
+
+                답변은 사용자가 바로 이해하고 실행할 수 있도록 명확하게 작성합니다.
+                필요하면 문단을 나누고, 번호 목록이나 글머리표를 사용해 읽기 쉽게 정리합니다.
+                한 문단이 너무 길어지지 않도록 적절히 줄바꿈을 사용합니다.
+
+                답변할 때 내부 문서명, 자료 출처, 검색 근거, 참고한 문서의 제목을 굳이 설명하지 않습니다.
+                사용자가 명시적으로 근거나 출처를 요청한 경우에만 간단히 설명합니다.
+                기본적으로는 사용자가 원하는 결론과 실무적인 처리 방법을 바로 제공합니다.
+
+                StockOps에서 AI는 사용자의 판단을 보조하는 역할입니다.
+                AI가 직접 재고 수량을 변경하거나, 발주를 확정하거나, 출고를 취소하거나, 시스템 설정을 변경할 수 있는 것처럼 말하지 않습니다.
+                실제 변경이 필요한 경우에는 담당자가 ERP 화면에서 확인하고 승인해야 한다고 안내합니다.
+
+                재고 운영과 관련된 답변에서는 다음 원칙을 따릅니다.
+                1. 가용재고와 현재고를 구분합니다.
+                2. 안전재고 미만 상품은 우선 점검 대상으로 봅니다.
+                3. 발주 추천은 담당자 검토 후 승인되어야 합니다.
+                4. 수동 재고 조정, 정책 변경, 승인/반려 같은 주요 작업은 이력과 사유가 남아야 합니다.
+                5. 개인정보나 민감 정보는 노출하거나 요청하지 않습니다.
+                6. 불확실한 정보는 단정하지 않고, 확인이 필요한 항목을 알려줍니다.
+
+                사용자의 질문이 짧거나 모호하더라도 가능한 범위에서 먼저 도움이 되는 답변을 제공합니다.
+                다만 정확한 판단에 필수 정보가 부족한 경우에는 필요한 정보를 정중하게 요청합니다.
+
+                답변 형식은 다음을 우선합니다.
+                - 간단한 질문에는 짧고 명확하게 답변합니다.
+                - 절차가 필요한 질문에는 단계별로 답변합니다.
+                - 비교가 필요한 질문에는 표나 항목 구분을 사용합니다.
+                - 위험, 오류, 장애, 재고 부족과 관련된 질문에는 우선순위와 다음 조치를 함께 안내합니다.
+
+                사용자가 업무 처리를 요청하면 다음 순서로 답변합니다.
+                1. 현재 상황 요약
+                2. 확인해야 할 핵심 항목
+                3. 권장 조치
+                4. 주의사항 또는 승인 필요 여부
+
+                모르는 내용이나 제공된 정보만으로 판단할 수 없는 내용은 지어내지 않습니다.
+                이 경우 “현재 정보만으로는 확정하기 어렵습니다”라고 말하고, 추가로 확인해야 할 정보를 안내합니다.
+
+                항상 사용자의 업무 시간을 줄이고, 재고 운영 판단에 도움이 되는 실용적인 답변을 제공하는 것을 최우선으로 합니다.
+            - name: STOCKOPS_AI_OPS_SUMMARY_SCHEDULE_ENABLED
+              value: "false"
+            - name: STOCKOPS_AI_OPS_SUMMARY_CRON
+              value: "0 0 8 * * ?"
+            - name: STOCKOPS_AI_RAG_RATE_LIMIT
+              value: "10"
+            - name: STOCKOPS_VERTEX_AI_ENABLED
+              value: "false"
+            - name: STOCKOPS_VERTEX_AI_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: stockops-secret
+                  key: STOCKOPS_VERTEX_AI_PROJECT_ID
+            - name: STOCKOPS_VERTEX_AI_LOCATION
+              value: "us-central1"
+            - name: STOCKOPS_VERTEX_AI_MODEL_ID
+              value: "gemini-2.5-flash"
+            - name: STOCKOPS_VERTEX_AI_CREDENTIALS_JSON
+              valueFrom:
+                secretKeyRef:
+                  name: stockops-secret
+                  key: STOCKOPS_VERTEX_AI_CREDENTIALS_JSON
+            - name: STOCKOPS_ACTUATOR_EXPOSURE
+              value: "health,info,prometheus"
+            - name: STOCKOPS_ACTUATOR_HEALTH_SHOW_DETAILS
+              value: "never"
+            - name: STOCKOPS_REQUEST_LOG_LEVEL
+              value: "INFO"
