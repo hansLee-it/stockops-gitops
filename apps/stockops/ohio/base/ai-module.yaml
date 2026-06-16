@@ -1,0 +1,48 @@
+# ==========================================================================
+# stockops-ai (FastAPI, 8000)
+# 기존 ohio/kubernetes.tf 의 kubernetes_deployment_v1.ai_module 와 1:1 동치.
+# replicas 생략 → HPA(stockops-ai-hpa) 소유.
+# ==========================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stockops-ai
+  labels:
+    app: stockops-ai
+spec:
+  selector:
+    matchLabels:
+      app: stockops-ai
+  template:
+    metadata:
+      labels:
+        app: stockops-ai
+    spec:
+      containers:
+        - name: ai-container
+          image: 448768137813.dkr.ecr.us-east-2.amazonaws.com/stockops-ai:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+          env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://adot-collector-opentelemetry-collector.opentelemetry:4318"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: stockops-secret
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: stockops-secret
+                  key: DB_PASSWORD
+            - name: DATABASE_URL # [region] 서울 RDS 엔드포인트
+              value: "postgresql://$(DB_USERNAME):$(DB_PASSWORD)@ohio-rds-postgres.cviu680ggsfb.us-east-2.rds.amazonaws.com:5432/stockops"

@@ -1,0 +1,15 @@
+# overlay/: 네임스페이스 고정 + 이미지 태그 주입 지점.
+# CI(deploy.yml)가 아래 newTag 값을 빌드 SHA 로 갱신하고 commit → ArgoCD 가 sync.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: stockops
+
+resources:
+  - ../base
+
+images:
+  - name: 448768137813.dkr.ecr.us-east-2.amazonaws.com/stockops-api
+    newTag: latest   # ← CI 가 ${GITHUB_SHA} 로 교체
+  - name: 448768137813.dkr.ecr.us-east-2.amazonaws.com/stockops-ai
+    newTag: latest   # ← CI 가 ${GITHUB_SHA} 로 교체

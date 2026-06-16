@@ -6,7 +6,7 @@ kind: Kustomization
 namespace: stockops
 
 resources:
-  - ../../base
+  - ../base
 
 images:
   - name: 448768137813.dkr.ecr.ap-northeast-2.amazonaws.com/stockops-api
