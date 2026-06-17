@@ -140,7 +140,7 @@ spec:
             - name: AWS_SESSION_TOKEN
               value: ""
             - name: STOCKOPS_BEDROCK_ENABLED
-              value: "false"
+              value: "true"
             - name: STOCKOPS_BEDROCK_REGION
               value: "ap-northeast-2"
             - name: STOCKOPS_BEDROCK_MODEL_ID
