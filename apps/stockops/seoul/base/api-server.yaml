@@ -144,9 +144,9 @@ spec:
             - name: STOCKOPS_BEDROCK_REGION
               value: "ap-northeast-2"
             - name: STOCKOPS_BEDROCK_MODEL_ID
-              value: "amazon.nova-micro-v1:0"
+              value: "amazon.nova-2-lite-v1:0"
             - name: STOCKOPS_BEDROCK_INFERENCE_PROFILE_ARN
-              value: "arn:aws:bedrock:ap-northeast-2:197180823954:application-inference-profile/fsx24gwrhzxq"
+              value: "arn:aws:bedrock:ap-northeast-2:197180823954:application-inference-profile/590sh9gsdg31"
             - name: STOCKOPS_BEDROCK_KNOWLEDGE_BASE_ID
               valueFrom:
                 secretKeyRef:
@@ -207,6 +207,7 @@ spec:
                 답변할 때 내부 문서명, 자료 출처, 검색 근거, 참고한 문서의 제목을 굳이 설명하지 않습니다.
                 사용자가 명시적으로 근거나 출처를 요청한 경우에만 간단히 설명합니다.
                 기본적으로는 사용자가 원하는 결론과 실무적인 처리 방법을 바로 제공합니다.
+                내부 사고 과정이나 <thinking> 같은 태그를 출력하지 말고 최종 답변만 작성합니다.
 
                 StockOps에서 AI는 사용자의 판단을 보조하는 역할입니다.
                 AI가 직접 재고 수량을 변경하거나, 발주를 확정하거나, 출고를 취소하거나, 시스템 설정을 변경할 수 있는 것처럼 말하지 않습니다.
